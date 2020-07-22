@@ -115,6 +115,7 @@ public class IdentityProvidersResource {
         InputPart file = formDataMap.get("file").get(0);
         InputStream inputStream = file.getBody(InputStream.class, null);
         IdentityProviderFactory providerFactory = getProviderFactorytById(providerId);
+        session.setAttribute("locale", getRealmDefaultLocale());
         Map<String, String> config = providerFactory.parseConfig(session, inputStream);
         return config;
     }
@@ -144,6 +145,7 @@ public class IdentityProvidersResource {
         try {
             IdentityProviderFactory providerFactory = getProviderFactorytById(providerId);
             Map<String, String> config;
+            session.setAttribute("locale", getRealmDefaultLocale());
             config = providerFactory.parseConfig(session, inputStream);
             return config;
         } finally {
@@ -152,6 +154,11 @@ public class IdentityProvidersResource {
             } catch (IOException e) {
             }
         }
+    }
+    
+    
+    private String getRealmDefaultLocale() {
+        return realm.getDefaultLocale() != null ? realm.getDefaultLocale() : "en";
     }
 
     /**
@@ -173,6 +180,7 @@ public class IdentityProvidersResource {
         }
         return representations;
     }
+   
 
     /**
      * Create a new identity provider

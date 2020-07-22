@@ -865,15 +865,57 @@ module.controller('RealmIdentityProviderCtrl', function($scope, $filter, $upload
 
             }
         ];
-        if (instance && instance.alias) {
+        $scope.contactTypes = [
+            {
+                type: "TECHNICAL",
+                name: "technical"
 
+            },
+            {
+                type: "SUPPORT",
+                name: "support"
+
+            },
+            {
+                type: "ADMINISTRATIVE",
+                name: "administrative"
+
+            },
+            {
+                type: "BILLING",
+                name: "billing"
+
+            },
+            {
+                type: "OTHER",
+                name: "other"
+
+            }
+        ];
+        if (instance && instance.alias) {
+        	//convert saml attributes from json string
+        	$scope.samlAttributes =  angular.fromJson($scope.identityProvider.config.samlAttributes);
+            if ($scope.samlAttributes === undefined) {
+            	$scope.samlAttributes =  {};
+            }
         } else {
+        	$scope.samlAttributes =  {};
             $scope.identityProvider.config.nameIDPolicyFormat = $scope.nameIdFormats[0].format;
             $scope.identityProvider.config.principalType = $scope.principalTypes[0].type;
             $scope.identityProvider.config.signatureAlgorithm = $scope.signatureAlgorithms[1];
             $scope.identityProvider.config.xmlSigKeyInfoKeyNameTransformer = $scope.xmlKeyNameTranformers[1];
         }
         $scope.identityProvider.config.entityId = $scope.identityProvider.config.entityId || (authUrl + '/realms/' + realm.realm);
+    
+    }
+    
+    $scope.addSamlAttribute = function() {
+        $scope.samlAttributes[$scope.newSamlAttribute.name] = $scope.newSamlAttribute.value;
+        delete $scope.newSamlAttribute;
+    }
+
+    $scope.removeSamlAttribute = function(name) {
+        delete $scope.samlAttributes[name];
     }
 
     $scope.hidePassword = true;
@@ -967,10 +1009,18 @@ module.controller('RealmIdentityProviderCtrl', function($scope, $filter, $upload
              $scope.identityProvider.enabled = data["enabledFromMetadata"] == "true";
              delete data["enabledFromMetadata"];
         }
+        if (data["mduiDisplayName"] !== undefined ) {
+             $scope.identityProvider.displayName = data["mduiDisplayName"];
+             delete data["mduiDisplayName"];
+        }
+        if (data["samlAttributes"] !== undefined ) {
+        	//convert saml attributes from json string to map
+        	$scope.samlAttributes =  angular.fromJson(data["samlAttributes"]);
+        	delete data["samlAttributes"];
+        }
         for (var key in data) {
             $scope.identityProvider.config[key] = data[key];
         }
-       
     }
 
     $scope.uploadFile = function() {
@@ -1058,6 +1108,10 @@ module.controller('RealmIdentityProviderCtrl', function($scope, $filter, $upload
     };
 
     $scope.save = function() {
+    	//convert saml attributes to json string
+        if ($scope.samlAttributes !== undefined ) {
+        	$scope.identityProvider.config.samlAttributes = angular.toJson($scope.samlAttributes);
+        }
         if ($scope.newIdentityProvider) {
             if (!$scope.identityProvider.alias) {
                 Notifications.error("You must specify an alias");
