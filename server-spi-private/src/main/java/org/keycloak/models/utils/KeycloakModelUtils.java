@@ -47,6 +47,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.transaction.InvalidTransactionException;
 import javax.transaction.SystemException;
 import javax.transaction.Transaction;
+
 import java.security.Key;
 import java.security.KeyPair;
 import java.security.PrivateKey;
@@ -56,6 +57,7 @@ import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -657,7 +659,10 @@ public final class KeycloakModelUtils {
 
     }
 
-    public static String getIdentityProviderDisplayName(KeycloakSession session, IdentityProviderModel provider) {
+    public static String getIdentityProviderDisplayName(KeycloakSession session, IdentityProviderModel provider, String local) {  
+        if (local != null && provider.getConfig().get("displayName#"+local) != null) {
+            return provider.getConfig().get("displayName#"+local);
+        } 
         String displayName = provider.getDisplayName();
         if (displayName != null && !displayName.isEmpty()) {
             return displayName;
