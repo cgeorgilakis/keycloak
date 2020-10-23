@@ -65,6 +65,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.google.common.collect.ImmutableMap;
+
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.MediaType;
@@ -136,8 +138,6 @@ public class IdentityProviderTest extends AbstractAdminTest {
       + "vOU8TyqfZF5jpv0IcrviLl/DoFrbjByeHR+pu/vClcAOjL/u7oQELuuTfNsBI4tpexUj5G8q/YbEz0gk7idf"
       + "LXrAUVcsR73oTngrhRfwUSmPrjjK0kjcRb6HL9V/+wh3R/6mEd59U08ExT8N38rhmn0CI3ehMdebReprP7U8=";
 
-    private static final Map<String, String> attributesMap =
-        Arrays.stream(new String[][] { { "http://macedir.org/entity-category-support", "http://refeds.org/category/research-and-scholarship,http://www.geant.net/uri/dataprotection-code-of-conduct/v1" } }).collect(Collectors.toMap(st -> st[0], st -> st[1]));
    
     @Test
     public void testFindAll() {
@@ -678,7 +678,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
 
 
     @Test
-    public void testSamlImportAndExportMultipleSigningKeys() throws Exception {
+    public void testSamlImportAndExportMultipleSigningKeys() throws URISyntaxException, IOException, ParsingException {
 
         // Use import-config to convert IDPSSODescriptor file into key value pairs
         // to use when creating a SAML Identity Provider
@@ -913,7 +913,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
         Assert.assertEquals("config", expected.getConfig(), actual.getConfig());
     }
 
-    private void assertCreatedSamlIdp(IdentityProviderRepresentation idp,boolean enabled) throws IOException {
+    private void assertCreatedSamlIdp(IdentityProviderRepresentation idp,boolean enabled) {
         //System.out.println("idp: " + idp);
         Assert.assertNotNull("IdentityProviderRepresentation not null", idp);
         Assert.assertNotNull("internalId", idp.getInternalId());
@@ -924,7 +924,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
         assertSamlConfig(idp.getConfig());
     }
 
-    private void assertSamlConfig(Map<String, String> config) throws IOException {
+    private void assertSamlConfig(Map<String, String> config) {
         // import endpoint simply converts IDPSSODescriptor into key value pairs.
         // check that saml-idp-metadata.xml was properly converted into key value pairs
        // System.out.println(config);
@@ -941,7 +941,6 @@ public class IdentityProviderTest extends AbstractAdminTest {
           "addExtensionsElementWithKeyInfo",
           "loginHint",
           "hideOnLoginPage",
-          "samlAttributes",
           "mdrpiRegistrationAuthority",
           "mdrpiRegistrationPolicy",
           "mduiDescription",
@@ -968,7 +967,6 @@ public class IdentityProviderTest extends AbstractAdminTest {
         assertThat(config, hasEntry("addExtensionsElementWithKeyInfo", "false"));
         assertThat(config, hasEntry("nameIDPolicyFormat", "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"));
         assertThat(config, hasEntry("hideOnLoginPage", "true"));
-        assertThat(config, hasEntry("samlAttributes", JsonSerialization.writeValueAsPrettyString(attributesMap)));
         assertThat(config, hasEntry("mdrpiRegistrationAuthority", "http://www.surfconext.nl/"));
         assertThat(config, hasEntry("mdrpiRegistrationPolicy", "https://wiki.surfnet.nl/display/eduGAIN/EduGAIN"));
         assertThat(config, hasEntry("mduiDescription", "Test SAML IdP"));
@@ -989,7 +987,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
         assertThat(config, hasEntry(is("signingCertificate"), notNullValue()));
     }
 
-    private void assertSamlImport(Map<String, String> config, String expectedSigningCertificates,boolean enabled) throws IOException {
+    private void assertSamlImport(Map<String, String> config, String expectedSigningCertificates,boolean enabled){
         //firtsly check and remove enabledFromMetadata from config
         boolean enabledFromMetadata = Boolean.valueOf(config.get(SAMLIdentityProviderConfig.ENABLED_FROM_METADATA));
         config.remove(SAMLIdentityProviderConfig.ENABLED_FROM_METADATA);
