@@ -182,22 +182,16 @@ public class SAMLIdentityProviderFactory extends AbstractIdentityProviderFactory
                     if (idpDescriptor.getExtensions() != null && idpDescriptor.getExtensions().getUIInfo() != null) {
                         UIInfoType uiInfo = idpDescriptor.getExtensions().getUIInfo();
                         // import attributes only if values with these locale exist
-                        Optional<LocalizedNameType> displayName = uiInfo.getDisplayName().stream()
-                            .filter(dn -> lang.equals(dn.getLang())).findFirst();
-                        if (displayName.isPresent())
-                            samlIdentityProviderConfig.setConfigMduiDisplayName(displayName.get().getValue());
-                        Optional<LocalizedNameType> description = uiInfo.getDescription().stream()
-                            .filter(dn -> lang.equals(dn.getLang())).findFirst();
-                        if (description.isPresent())
-                            samlIdentityProviderConfig.setMduiDescription(description.get().getValue());
-                        Optional<LocalizedURIType> informationURL = uiInfo.getInformationURL().stream()
-                            .filter(dn -> lang.equals(dn.getLang())).findFirst();
-                        if (informationURL.isPresent())
-                            samlIdentityProviderConfig.setMduiInformationURL(informationURL.get().getValue().toString());
-                        Optional<LocalizedURIType> privacyStatementURL = uiInfo.getPrivacyStatementURL().stream()
-                            .filter(dn -> lang.equals(dn.getLang())).findFirst();
-                        if (privacyStatementURL.isPresent())
-                            samlIdentityProviderConfig.setMduiPrivacyStatementURL(privacyStatementURL.get().getValue().toString());
+                        uiInfo.getDisplayName().stream().filter(dn -> lang.equals(dn.getLang())).findFirst().ifPresent(
+                            displayName -> samlIdentityProviderConfig.setConfigMduiDisplayName(displayName.getValue()));
+                        uiInfo.getDescription().stream().filter(dn -> lang.equals(dn.getLang())).findFirst()
+                            .ifPresent(description -> samlIdentityProviderConfig.setMduiDescription(description.getValue()));
+                        uiInfo.getInformationURL().stream().filter(dn -> lang.equals(dn.getLang())).findFirst()
+                            .ifPresent(informationURL -> samlIdentityProviderConfig
+                                .setMduiInformationURL(informationURL.getValue().toString()));
+                        uiInfo.getPrivacyStatementURL().stream().filter(dn -> lang.equals(dn.getLang())).findFirst()
+                            .ifPresent(privacyStatementURL -> samlIdentityProviderConfig
+                                .setMduiPrivacyStatementURL(privacyStatementURL.getValue().toString()));
                         if (!uiInfo.getLogo().isEmpty()) {
                             LogoType logo = uiInfo.getLogo().get(0);
                             samlIdentityProviderConfig.setMduiLogo(logo.getValue().toString());
@@ -209,19 +203,16 @@ public class SAMLIdentityProviderFactory extends AbstractIdentityProviderFactory
 
                     // organization
                     if (entityType.getOrganization() != null) {
-                        Optional<LocalizedNameType> organizationName = entityType.getOrganization().getOrganizationName()
-                            .stream().filter(dn -> lang.equals(dn.getLang())).findFirst();
-                        if (organizationName.isPresent())
-                            samlIdentityProviderConfig.setMdOrganizationName(organizationName.get().getValue());
-                        Optional<LocalizedNameType> organizationDisplayName = entityType.getOrganization()
-                            .getOrganizationDisplayName().stream().filter(dn -> lang.equals(dn.getLang())).findFirst();
-                        if (organizationDisplayName.isPresent())
-                            samlIdentityProviderConfig.setMdOrganizationDisplayName(organizationDisplayName.get().getValue());
-                        Optional<LocalizedURIType> organizationURL = entityType.getOrganization().getOrganizationURL().stream()
-                            .filter(dn -> lang.equals(dn.getLang())).findFirst();
-                        if (organizationURL.isPresent())
-                            samlIdentityProviderConfig.setMdOrganizationURL(organizationURL.get().getValue().toString());
-
+                        entityType.getOrganization().getOrganizationName().stream().filter(dn -> lang.equals(dn.getLang()))
+                            .findFirst().ifPresent(organizationName -> samlIdentityProviderConfig
+                                .setMdOrganizationName(organizationName.getValue()));
+                        entityType.getOrganization().getOrganizationDisplayName().stream()
+                            .filter(dn -> lang.equals(dn.getLang())).findFirst()
+                            .ifPresent(organizationDisplayName -> samlIdentityProviderConfig
+                                .setMdOrganizationDisplayName(organizationDisplayName.getValue()));
+                        entityType.getOrganization().getOrganizationURL().stream().filter(dn -> lang.equals(dn.getLang()))
+                            .findFirst().ifPresent(organizationURL -> samlIdentityProviderConfig
+                                .setMdOrganizationURL(organizationURL.getValue().toString()));
                     }
 
                     // contact person
@@ -269,16 +260,13 @@ public class SAMLIdentityProviderFactory extends AbstractIdentityProviderFactory
                             RegistrationInfoType registrationInfo = entityType.getExtensions().getRegistrationInfo();
                             samlIdentityProviderConfig
                                 .setΜdrpiRegistrationAuthority(registrationInfo.getRegistrationAuthority().toString());
-                            Optional<LocalizedURIType> registrationPolicy = registrationInfo.getRegistrationPolicy().stream()
-                                .filter(dn -> lang.equals(dn.getLang())).findFirst();
-                            if (registrationPolicy.isPresent())
-                                samlIdentityProviderConfig
-                                    .setΜdrpiRegistrationPolicy(registrationPolicy.get().getValue().toString());
+                            registrationInfo.getRegistrationPolicy().stream().filter(dn -> lang.equals(dn.getLang()))
+                                .findFirst().ifPresent(registrationPolicy -> samlIdentityProviderConfig
+                                    .setΜdrpiRegistrationPolicy(registrationPolicy.getValue().toString()));
                         }
 
                     }
 
-                    String test = samlIdentityProviderConfig.getSamlAttributes();
                     return samlIdentityProviderConfig.getConfig();
                 }
             }

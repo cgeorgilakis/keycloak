@@ -181,21 +181,6 @@ public class EntityDescriptorDescriptionConverter implements ClientDescriptionCo
             }
         }
 
-        // add user attributes
-        app.setProtocolMappers(spDescriptorType.getAttributeConsumingService().stream().flatMap(att -> att.getRequestedAttribute().stream())
-            .map(attr -> {
-                ProtocolMapperRepresentation mapper = new ProtocolMapperRepresentation();
-                mapper.setName(attr.getName());
-                mapper.setProtocol("saml");
-                mapper.setProtocolMapper("saml-user-attribute-mapper");
-                Map<String, String> config = new HashMap<>();
-                config.put("attribute.name", attr.getName());
-                if (attr.getFriendlyName() != null)
-                    config.put("friendly.name", attr.getFriendlyName());
-                mapper.setConfig(config);
-                return mapper;
-            }).collect(Collectors.toList()));
-       
         for (KeyDescriptorType keyDescriptor : spDescriptorType.getKeyDescriptor()) {
             X509Certificate cert = null;
             try {

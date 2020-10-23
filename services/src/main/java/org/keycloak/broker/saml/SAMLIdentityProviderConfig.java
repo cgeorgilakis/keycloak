@@ -19,16 +19,12 @@ package org.keycloak.broker.saml;
 import static org.keycloak.common.util.UriUtils.checkUrl;
 
 import java.io.IOException;
-import java.util.Map;
-
 import org.keycloak.common.enums.SslRequired;
 import org.keycloak.dom.saml.v2.protocol.AuthnContextComparisonType;
 import org.keycloak.models.IdentityProviderModel;
-import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
 import org.keycloak.protocol.saml.SamlPrincipalType;
 import org.keycloak.saml.common.util.XmlKeyInfoKeyNameTransformer;
-import org.keycloak.util.JsonSerialization;
 
 /**
  * @author Pedro Igor

@@ -55,16 +55,16 @@ public enum SAMLMetadataQNames implements HasQName {
     SURNAME("SurName"),
     TELEPHONE_NUMBER("TelephoneNumber"),
     //mdui elements
-    DESCRIPTION(JBossSAMLURIConstants.METADATA_UI ,"Description"),
-    DISPLAY_NAME(JBossSAMLURIConstants.METADATA_UI ,"DisplayName"),
-    INFORMATION_URL(JBossSAMLURIConstants.METADATA_UI ,"InformationURL"),
-    KEYWORDS(JBossSAMLURIConstants.METADATA_UI ,"Keywords"),
-    LOGO(JBossSAMLURIConstants.METADATA_UI ,"Logo"),
-    PRIVACY_STATEMENT_URL(JBossSAMLURIConstants.METADATA_UI ,"PrivacyStatementURL"),
-    UIINFO(JBossSAMLURIConstants.METADATA_UI ,"UIInfo"),
+    DESCRIPTION(JBossSAMLURIConstants.METADATA_UI, "Description"),
+    DISPLAY_NAME(JBossSAMLURIConstants.METADATA_UI, "DisplayName"),
+    INFORMATION_URL(JBossSAMLURIConstants.METADATA_UI, "InformationURL"),
+    KEYWORDS(JBossSAMLURIConstants.METADATA_UI, "Keywords"),
+    LOGO(JBossSAMLURIConstants.METADATA_UI, "Logo"),
+    PRIVACY_STATEMENT_URL(JBossSAMLURIConstants.METADATA_UI, "PrivacyStatementURL"),
+    UIINFO(JBossSAMLURIConstants.METADATA_UI, "UIInfo"),
     //mdrpi elemetns METADATA_RPI
-    REGISTRATION_INFO(JBossSAMLURIConstants.METADATA_RPI ,"RegistrationInfo"),
-    REGISTRATION_POLICY(JBossSAMLURIConstants.METADATA_RPI ,"RegistrationPolicy"),
+    REGISTRATION_INFO(JBossSAMLURIConstants.METADATA_RPI, "RegistrationInfo"),
+    REGISTRATION_POLICY(JBossSAMLURIConstants.METADATA_RPI, "RegistrationPolicy"),
     
     // Attribute names
     ATTR_ENTITY_ID(null, "entityID"),

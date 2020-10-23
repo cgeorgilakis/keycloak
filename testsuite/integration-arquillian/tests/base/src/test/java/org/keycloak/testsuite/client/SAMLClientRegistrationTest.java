@@ -81,12 +81,6 @@ public class SAMLClientRegistrationTest extends AbstractClientRegistrationTest {
           "https://LoadBalancer-9.siroe.com:3443/federation/Consumer/metaAlias/sp/redirect"
         ));  // No redirect URI for ARTIFACT binding which is unsupported
 
-        assertThat(response.getAttributes().get("saml_single_logout_service_url_redirect"), is("https://LoadBalancer-9.siroe.com:3443/federation/SPSloRedirect/metaAlias/sp"));
-        Assert.assertNotNull(response.getProtocolMappers());
-        Assert.assertEquals(1,response.getProtocolMappers().size());
-        ProtocolMapperRepresentation mapper = response.getProtocolMappers().get(0);
-        Assert.assertEquals("saml-user-attribute-mapper",mapper.getProtocolMapper());
-        Assert.assertEquals("urn:oid:2.5.4.42",mapper.getConfig().get("attribute.name"));
     }
 
     @Test
