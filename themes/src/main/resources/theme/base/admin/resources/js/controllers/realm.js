@@ -893,15 +893,9 @@ module.controller('RealmIdentityProviderCtrl', function($scope, $filter, $upload
             }
         ];
         if (instance && instance.alias) {
-        	//convert saml attributes from json string
-        	$scope.samlAttributes =  angular.fromJson($scope.identityProvider.config.samlAttributes);        	
-            if ($scope.samlAttributes === undefined) {
-            	$scope.samlAttributes =  {};
-            }
             $scope.identityProvider.config.mdContactEmailAddress =  angular.fromJson($scope.identityProvider.config.mdContactEmailAddress);
         	$scope.identityProvider.config.mdContactTelephoneNumber =  angular.fromJson($scope.identityProvider.config.mdContactTelephoneNumber);
         } else {
-        	$scope.samlAttributes =  {};
             $scope.identityProvider.config.nameIDPolicyFormat = $scope.nameIdFormats[0].format;
             $scope.identityProvider.config.principalType = $scope.principalTypes[0].type;
             $scope.identityProvider.config.signatureAlgorithm = $scope.signatureAlgorithms[1];
@@ -909,15 +903,6 @@ module.controller('RealmIdentityProviderCtrl', function($scope, $filter, $upload
         }
         $scope.identityProvider.config.entityId = $scope.identityProvider.config.entityId || (authUrl + '/realms/' + realm.realm);
     
-    }
-    
-    $scope.addSamlAttribute = function() {
-        $scope.samlAttributes[$scope.newSamlAttribute.name] = $scope.newSamlAttribute.value;
-        delete $scope.newSamlAttribute;
-    }
-
-    $scope.removeSamlAttribute = function(name) {
-        delete $scope.samlAttributes[name];
     }
     
     $scope.deleteContactEmailAddress = function(index) {
@@ -1033,11 +1018,6 @@ module.controller('RealmIdentityProviderCtrl', function($scope, $filter, $upload
              $scope.identityProvider.displayName = data["mduiDisplayName"];
              delete data["mduiDisplayName"];
         }
-        if (data["samlAttributes"] !== undefined ) {
-        	//convert saml attributes from json string to map
-        	$scope.samlAttributes =  angular.fromJson(data["samlAttributes"]);
-        	delete data["samlAttributes"];
-        }
         if (data["mdContactEmailAddress"] !== undefined ) {
         	$scope.identityProvider.config.mdContactEmailAddress =  angular.fromJson(data["mdContactEmailAddress"]);
         	delete data["mdContactEmailAddress"];
@@ -1136,10 +1116,6 @@ module.controller('RealmIdentityProviderCtrl', function($scope, $filter, $upload
     };
 
     $scope.save = function() {
-    	//convert saml attributes to json string
-        if ($scope.samlAttributes !== undefined ) {
-        	$scope.identityProvider.config.samlAttributes = angular.toJson($scope.samlAttributes);
-        }
         if ($scope.newContactEmailAddress && $scope.newContactEmailAddress.length > 0) {
             $scope.addContactEmailAddress();
         }

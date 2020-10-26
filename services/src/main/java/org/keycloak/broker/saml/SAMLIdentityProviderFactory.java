@@ -229,45 +229,30 @@ public class SAMLIdentityProviderFactory extends AbstractIdentityProviderFactory
                     samlIdentityProviderConfig.setEnabledFromMetadata(entityType.getValidUntil() == null
                         || entityType.getValidUntil().toGregorianCalendar().getTime().after(new Date(System.currentTimeMillis())));
 
-                    // check in extensions
-                    if (entityType.getExtensions() != null) {
-                        if (entityType.getExtensions().getEntityAttributes() != null) {
-                            Map<String, String> samlAttributes = new HashMap<>();
-                            for (AttributeType attribute : entityType.getExtensions().getEntityAttributes().getAttribute()) {
-                                if (MACEDIR_ENTITY_CATEGORY.equals(attribute.getName())
-                                    && attribute.getAttributeValue().contains(REFEDS_HIDE_FROM_DISCOVERY)) {
-                                    samlIdentityProviderConfig.setHideOnLogin(true);
-                                } else {
-                                    if (samlAttributes.containsKey(attribute.getName())) {
-                                        attribute.getAttributeValue().stream()
-                                            .forEach(obj -> samlAttributes.put(attribute.getName(),
-                                                String.join(",",samlAttributes.get(attribute.getName()), obj.toString())));
-                                    } else {
-                                        samlAttributes.put(attribute.getName(), String.join(",", attribute.getAttributeValue()
-                                            .stream().map(Object::toString).collect(Collectors.toList())));
-                                    }
-                                }
+                    if (entityType.getExtensions() != null && entityType.getExtensions().getEntityAttributes() != null) {
+                        for (AttributeType attribute : entityType.getExtensions().getEntityAttributes().getAttribute()) {
+                            if (MACEDIR_ENTITY_CATEGORY.equals(attribute.getName())
+                                && attribute.getAttributeValue().contains(REFEDS_HIDE_FROM_DISCOVERY)) {
+                                samlIdentityProviderConfig.setHideOnLogin(true);
                             }
-                            if (!samlAttributes.isEmpty()) 
-                                samlIdentityProviderConfig.setSamlAttributes(JsonSerialization.writeValueAsPrettyString(samlAttributes));
-
-                        }
-
-                        if (entityType.getExtensions().getRegistrationInfo() != null) {
-                            RegistrationInfoType registrationInfo = entityType.getExtensions().getRegistrationInfo();
-                            samlIdentityProviderConfig
-                                .setΜdrpiRegistrationAuthority(registrationInfo.getRegistrationAuthority().toString());
-                            registrationInfo.getRegistrationPolicy().stream().filter(dn -> lang.equals(dn.getLang()))
-                                .findFirst().ifPresent(registrationPolicy -> samlIdentityProviderConfig
-                                    .setΜdrpiRegistrationPolicy(registrationPolicy.getValue().toString()));
                         }
 
                     }
 
+                    if (entityType.getExtensions().getRegistrationInfo() != null) {
+                        RegistrationInfoType registrationInfo = entityType.getExtensions().getRegistrationInfo();
+                        samlIdentityProviderConfig
+                            .setΜdrpiRegistrationAuthority(registrationInfo.getRegistrationAuthority().toString());
+                        registrationInfo.getRegistrationPolicy().stream().filter(dn -> lang.equals(dn.getLang())).findFirst()
+                            .ifPresent(registrationPolicy -> samlIdentityProviderConfig
+                                .setΜdrpiRegistrationPolicy(registrationPolicy.getValue().toString()));
+                    }
+                    
+
                     return samlIdentityProviderConfig.getConfig();
                 }
             }
-        } catch (ParsingException | IOException pe) {
+        } catch (ParsingException pe) {
             throw new RuntimeException("Could not parse IdP SAML Metadata", pe);
         }
 

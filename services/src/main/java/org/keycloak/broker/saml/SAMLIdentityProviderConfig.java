@@ -61,8 +61,6 @@ public class SAMLIdentityProviderConfig extends IdentityProviderModel {
     public static final String AUTHN_CONTEXT_CLASS_REFS = "authnContextClassRefs";
     public static final String AUTHN_CONTEXT_DECL_REFS = "authnContextDeclRefs";   
     public static final String SIGN_SP_METADATA = "signSpMetadata"; 
-    // entity attributes
-    public static final String SAML_ATTRIBUTES = "samlAttributes";
     // description extensions
     public static final String MDRPI_REGISTRATION_AUTHORITY = "mdrpiRegistrationAuthority";
     public static final String MDRPI_REGISTRATION_POLICY = "mdrpiRegistrationPolicy";
@@ -359,14 +357,6 @@ public class SAMLIdentityProviderConfig extends IdentityProviderModel {
 
     public void setSignSpMetadata(boolean signSpMetadata) {
         getConfig().put(SIGN_SP_METADATA, String.valueOf(signSpMetadata));
-    }
-
-    public String getSamlAttributes() throws IOException {
-        return getConfig().get(SAML_ATTRIBUTES) ;
-    }
-
-    public void setSamlAttributes(String attributes) throws IOException {
-        getConfig().put(SAML_ATTRIBUTES, attributes);
     }
 
     public String getΜdrpiRegistrationAuthority() {
