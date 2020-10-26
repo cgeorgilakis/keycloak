@@ -61,6 +61,7 @@ import org.keycloak.testsuite.broker.OIDCIdentityProviderConfigRep;
 import org.keycloak.testsuite.updaters.RealmAttributeUpdater;
 import org.keycloak.testsuite.util.AdminEventPaths;
 import org.keycloak.util.JsonSerialization;
+import org.testcontainers.shaded.com.google.common.collect.ImmutableList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -913,7 +914,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
         Assert.assertEquals("config", expected.getConfig(), actual.getConfig());
     }
 
-    private void assertCreatedSamlIdp(IdentityProviderRepresentation idp,boolean enabled) {
+    private void assertCreatedSamlIdp(IdentityProviderRepresentation idp,boolean enabled) throws IOException {
         //System.out.println("idp: " + idp);
         Assert.assertNotNull("IdentityProviderRepresentation not null", idp);
         Assert.assertNotNull("internalId", idp.getInternalId());
@@ -924,7 +925,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
         assertSamlConfig(idp.getConfig());
     }
 
-    private void assertSamlConfig(Map<String, String> config) {
+    private void assertSamlConfig(Map<String, String> config) throws IOException {
         // import endpoint simply converts IDPSSODescriptor into key value pairs.
         // check that saml-idp-metadata.xml was properly converted into key value pairs
        // System.out.println(config);
@@ -982,12 +983,12 @@ public class IdentityProviderTest extends AbstractAdminTest {
         assertThat(config, hasEntry("mdContactType", ContactTypeType.ADMINISTRATIVE.name()));
         assertThat(config, hasEntry("mdContactGivenName", "John"));
         assertThat(config, hasEntry("mdContactSurname", "Tester"));
-        assertThat(config, hasEntry("mdContactEmailAddress", "support@samltest.com"));
-        assertThat(config, hasEntry("mdContactTelephoneNumber", "1234567890,9876543210"));
+        assertThat(config, hasEntry("mdContactEmailAddress", JsonSerialization.writeValueAsPrettyString( ImmutableList.<String>builder().add("support@samltest.com").build() )));
+        assertThat(config, hasEntry("mdContactTelephoneNumber",JsonSerialization.writeValueAsPrettyString( ImmutableList.<String>builder().add("1234567890").add("9876543210").build() )));
         assertThat(config, hasEntry(is("signingCertificate"), notNullValue()));
     }
 
-    private void assertSamlImport(Map<String, String> config, String expectedSigningCertificates,boolean enabled){
+    private void assertSamlImport(Map<String, String> config, String expectedSigningCertificates,boolean enabled) throws IOException{
         //firtsly check and remove enabledFromMetadata from config
         boolean enabledFromMetadata = Boolean.valueOf(config.get(SAMLIdentityProviderConfig.ENABLED_FROM_METADATA));
         config.remove(SAMLIdentityProviderConfig.ENABLED_FROM_METADATA);

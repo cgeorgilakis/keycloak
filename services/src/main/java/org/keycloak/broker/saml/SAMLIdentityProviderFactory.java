@@ -222,11 +222,8 @@ public class SAMLIdentityProviderFactory extends AbstractIdentityProviderFactory
                         samlIdentityProviderConfig.setMdContactCompany(contact.getCompany());
                         samlIdentityProviderConfig.setMdContactGivenName(contact.getGivenName());
                         samlIdentityProviderConfig.setMdContactSurname(contact.getSurName());
-                        if (!contact.getEmailAddress().isEmpty())
-                            samlIdentityProviderConfig.setMdContactEmailAddress(String.join(",", contact.getEmailAddress()));
-                        if (!contact.getTelephoneNumber().isEmpty())
-                            samlIdentityProviderConfig
-                                .setMdContactTelephoneNumber(String.join(",", contact.getTelephoneNumber()));
+                        samlIdentityProviderConfig.setMdContactEmailAddress(contact.getEmailAddress());
+                        samlIdentityProviderConfig.setMdContactTelephoneNumber(contact.getTelephoneNumber());
                     }
 
                     samlIdentityProviderConfig.setEnabledFromMetadata(entityType.getValidUntil() == null

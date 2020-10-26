@@ -19,12 +19,15 @@ package org.keycloak.broker.saml;
 import static org.keycloak.common.util.UriUtils.checkUrl;
 
 import java.io.IOException;
+import java.util.List;
+
 import org.keycloak.common.enums.SslRequired;
 import org.keycloak.dom.saml.v2.protocol.AuthnContextComparisonType;
 import org.keycloak.models.IdentityProviderModel;
 import org.keycloak.models.RealmModel;
 import org.keycloak.protocol.saml.SamlPrincipalType;
 import org.keycloak.saml.common.util.XmlKeyInfoKeyNameTransformer;
+import org.keycloak.util.JsonSerialization;
 
 /**
  * @author Pedro Igor
@@ -498,16 +501,26 @@ public class SAMLIdentityProviderConfig extends IdentityProviderModel {
         return getConfig().get(MD_CONTACT_EMAIL_ADDRESS);
     }
 
-    public void setMdContactEmailAddress(String mdContactEmailAddress) {
-        getConfig().put(MD_CONTACT_EMAIL_ADDRESS, mdContactEmailAddress);
+    public void setMdContactEmailAddress(List<String> mdContactEmailAddress) {
+        try {
+            getConfig().put(MD_CONTACT_EMAIL_ADDRESS, JsonSerialization.writeValueAsPrettyString(mdContactEmailAddress));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     public String getMdContactTelephoneNumber() {
         return getConfig().get(MD_CONTACT_TELEPHONE_NUMBER);
     }
 
-    public void setMdContactTelephoneNumber(String mdContactTelephoneNumber) {
-        getConfig().put(MD_CONTACT_TELEPHONE_NUMBER, mdContactTelephoneNumber);
+    public void setMdContactTelephoneNumber(List<String> mdContactTelephoneNumber) {
+        try {
+            getConfig().put(MD_CONTACT_TELEPHONE_NUMBER, JsonSerialization.writeValueAsPrettyString(mdContactTelephoneNumber));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     @Override
