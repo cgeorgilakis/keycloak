@@ -968,8 +968,8 @@ public class IdentityProviderTest extends AbstractAdminTest {
         assertThat(config, hasEntry("mdContactType", ContactTypeType.ADMINISTRATIVE.name()));
         assertThat(config, hasEntry("mdContactGivenName", "John"));
         assertThat(config, hasEntry("mdContactSurname", "Tester"));
-        assertThat(config, hasEntry("mdContactEmailAddress", JsonSerialization.writeValueAsPrettyString( ImmutableList.<String>builder().add("support@samltest.com").build() )));
-        assertThat(config, hasEntry("mdContactTelephoneNumber",JsonSerialization.writeValueAsPrettyString( ImmutableList.<String>builder().add("1234567890").add("9876543210").build() )));
+        assertThat(config, hasEntry("mdContactEmailAddress", JsonSerialization.writeValueAsString( ImmutableList.<String>builder().add("support@samltest.com").build() )));
+        assertThat(config, hasEntry("mdContactTelephoneNumber",JsonSerialization.writeValueAsString( ImmutableList.<String>builder().add("1234567890").add("9876543210").build() )));
         assertThat(config, hasEntry(is("signingCertificate"), notNullValue()));
     }
 

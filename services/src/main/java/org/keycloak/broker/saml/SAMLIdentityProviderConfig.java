@@ -493,7 +493,7 @@ public class SAMLIdentityProviderConfig extends IdentityProviderModel {
 
     public void setMdContactEmailAddress(List<String> mdContactEmailAddress) {
         try {
-            getConfig().put(MD_CONTACT_EMAIL_ADDRESS, JsonSerialization.writeValueAsPrettyString(mdContactEmailAddress));
+            getConfig().put(MD_CONTACT_EMAIL_ADDRESS, JsonSerialization.writeValueAsString(mdContactEmailAddress));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -506,7 +506,7 @@ public class SAMLIdentityProviderConfig extends IdentityProviderModel {
 
     public void setMdContactTelephoneNumber(List<String> mdContactTelephoneNumber) {
         try {
-            getConfig().put(MD_CONTACT_TELEPHONE_NUMBER, JsonSerialization.writeValueAsPrettyString(mdContactTelephoneNumber));
+            getConfig().put(MD_CONTACT_TELEPHONE_NUMBER, JsonSerialization.writeValueAsString(mdContactTelephoneNumber));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
