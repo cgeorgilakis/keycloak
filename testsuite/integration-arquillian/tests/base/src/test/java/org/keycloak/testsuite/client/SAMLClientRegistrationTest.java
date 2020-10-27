@@ -28,7 +28,6 @@ import org.keycloak.events.Errors;
 import org.keycloak.representations.idm.ClientInitialAccessCreatePresentation;
 import org.keycloak.representations.idm.ClientInitialAccessPresentation;
 import org.keycloak.representations.idm.ClientRepresentation;
-import org.keycloak.representations.idm.ProtocolMapperRepresentation;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.testsuite.Assert;
@@ -80,7 +79,7 @@ public class SAMLClientRegistrationTest extends AbstractClientRegistrationTest {
           "https://LoadBalancer-9.siroe.com:3443/federation/Consumer/metaAlias/sp/paos",
           "https://LoadBalancer-9.siroe.com:3443/federation/Consumer/metaAlias/sp/redirect"
         ));  // No redirect URI for ARTIFACT binding which is unsupported
-
+        assertThat(response.getAttributes().get("saml_single_logout_service_url_redirect"), is("https://LoadBalancer-9.siroe.com:3443/federation/SPSloRedirect/metaAlias/sp"));
     }
 
     @Test
