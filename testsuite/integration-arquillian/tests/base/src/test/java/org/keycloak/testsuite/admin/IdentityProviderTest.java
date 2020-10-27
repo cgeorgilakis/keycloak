@@ -76,6 +76,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import java.util.UUID;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
@@ -97,7 +98,6 @@ import static org.keycloak.saml.common.constants.JBossSAMLURIConstants.XMLDSIG_N
 import static org.keycloak.testsuite.util.ServerURLs.AUTH_SERVER_SSL_REQUIRED;
 import org.keycloak.testsuite.arquillian.annotation.AuthServerContainerExclude;
 import static org.keycloak.testsuite.arquillian.annotation.AuthServerContainerExclude.AuthServer.REMOTE;
-
 
 /**
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
@@ -125,7 +125,6 @@ public class IdentityProviderTest extends AbstractAdminTest {
       + "vOU8TyqfZF5jpv0IcrviLl/DoFrbjByeHR+pu/vClcAOjL/u7oQELuuTfNsBI4tpexUj5G8q/YbEz0gk7idf"
       + "LXrAUVcsR73oTngrhRfwUSmPrjjK0kjcRb6HL9V/+wh3R/6mEd59U08ExT8N38rhmn0CI3ehMdebReprP7U8=";
 
-   
     @Test
     public void testFindAll() {
         create(createRep("google", "google"));
@@ -145,7 +144,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
         Response response = realm.identityProviders().create(newIdentityProvider);
         Assert.assertEquals(400, response.getStatus());
     }
-
+    
     @Test
     public void testCreate() {
         IdentityProviderRepresentation newIdentityProvider = createRep("new-identity-provider", "oidc");
@@ -637,7 +636,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
 
         assertSamlExport(body);
     }
-
+    
     @Test
     public void testSamlImportAndExportDisabled() throws URISyntaxException, IOException, ParsingException {
 
@@ -663,7 +662,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
 
     }
 
-
+    
     @Test
     public void testSamlImportAndExportMultipleSigningKeys() throws URISyntaxException, IOException, ParsingException {
 
@@ -701,7 +700,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
 
         assertSamlExport(body);
     }
-    
+
     @Test
     public void testMappers() {
         create(createRep("google", "google"));
@@ -914,7 +913,7 @@ public class IdentityProviderTest extends AbstractAdminTest {
     private void assertSamlConfig(Map<String, String> config) throws IOException {
         // import endpoint simply converts IDPSSODescriptor into key value pairs.
         // check that saml-idp-metadata.xml was properly converted into key value pairs
-       // System.out.println(config);
+        //System.out.println(config);
         assertThat(config.keySet(), containsInAnyOrder(
           "validateSignature",
           "singleLogoutServiceUrl",
